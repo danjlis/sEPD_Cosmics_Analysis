@@ -1,0 +1,26 @@
+--------------- sEPD Cosmics Analysis -----------------
+
+Here are the directions for running this analysis
+
+1. Make root file from prdf
+   - cd /sphenix/data/data02/sphenix/cemc/sectortest/root/
+   - ../
+0. Make directory in sepd_mip_plots/cosmics_s##
+
+1. Edit cosmics_config.config (directions are in the file)
+
+2. Run:
+   $ root sEPD_Cosmics_Analysis.C
+   
+   This puts histograms in ./root/outfile_[top sector]_[bottom_sector].root
+
+3. Run:    
+   $ root sEPD_Cosmics_Fitting.C
+
+   This	puts histograms and fits in ./root/hists_and_fits_[top sector]_[bottom_sector].root
+
+4. Run:     
+   $ root sEPD_Cosmics_Draw.C
+
+   This puts plots in ./sepd_mip_plots/cosmics_s##/
+
