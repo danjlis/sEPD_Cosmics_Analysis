@@ -4,7 +4,7 @@ Here are the directions for running this analysis
 
 1. Make root file from prdf
    - cd /sphenix/data/data02/sphenix/cemc/sectortest/root/
-   - ../
+   - ../wd409_sectortest/wd409  <prdf file>
 0. Make directory in sepd_mip_plots/cosmics_s##
 
 1. Edit cosmics_config.config (directions are in the file)
