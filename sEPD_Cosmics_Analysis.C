@@ -224,7 +224,7 @@ void sepdmip_run(
     // Check if the file goes through a shifted test for a shifted coincidence
     //if(!shift && (i==bad_sipm||i==(bad_sipm + 16))) continue;
     if(shift && (i!=bad_sipm + 16)) continue;
-    if(!top_oe && (i%16 == 0)) continue;
+    //if(!top_oe && (i%16 == 0)) continue;
 
     fout->cd();
     h_sepdmip[i]->Write();
