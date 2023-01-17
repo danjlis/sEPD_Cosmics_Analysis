@@ -57,10 +57,13 @@ double GetFWHM(TH1D *h){
   return fwhm;
 }
 void sepdmip_draw(
-		  TFile *fin, int sector, int sector_oe, int minadc
+		  TFile *fin, int sector, int sector_oe, int minadc, string caption
 	     )
 {
   gStyle->SetOptStat(0);
+
+  string cap = "";
+  if(caption!="") cap = "_" + caption;
 
   char sector_string[5];
   if (sector < 10) sprintf(sector_string,"s0%d",sector);
@@ -125,7 +128,7 @@ void sepdmip_draw(
   t->SetTextFont(43);
   t->SetTextSize(40);
   t->Draw();
-  c1->Print(Form("cosmics_%s.pdf(",sector_string),"Title");
+  c1->Print(Form("./final_plots/cosmics_%s%s.pdf(",sector_string, cap.data()),"Title");
 
   SetyjPadStyle();
   
@@ -222,9 +225,9 @@ void sepdmip_draw(
 
     tl->Draw();
 
-    c1->Print(Form("cosmics_%s.pdf",sector_string),Form("Tile %d", ntile[i]));
-    c1->SaveAs(Form("%s/sepd_mip_%s_%d.pdf",outdir, sector_string, ntile[i]));
-    c1->SaveAs(Form("%s/sepd_mip_%s_%d.png",outdir, sector_string, ntile[i]));
+    c1->Print(Form("./final_plots/cosmics_%s%s.pdf",sector_string,cap.data()),Form("Tile %d", ntile[i]));
+    c1->SaveAs(Form("%s/sepd_mip_%s_%d%s.pdf",outdir, sector_string, ntile[i], cap.data()));
+    c1->SaveAs(Form("%s/sepd_mip_%s_%d%s.png",outdir, sector_string, ntile[i], cap.data()));
   }
   
  
@@ -328,18 +331,19 @@ void sepdmip_draw(
   c5->SaveAs(Form("%s/langaus_width_mpv_%s.pdf",outdir, sector_string));
   c5->SaveAs(Form("%s/langaus_width_mpv_%s.png",outdir, sector_string));
   */ 
-  c6->SaveAs(Form("%s/langaus_fwhm_mean_%s.pdf",outdir, sector_string));
-  c6->SaveAs(Form("%s/langaus_fwhm_mean_%s.png",outdir, sector_string));
+  c6->SaveAs(Form("%s/langaus_fwhm_mean_%s%s.pdf",outdir, sector_string, cap.data()));
+  c6->SaveAs(Form("%s/langaus_fwhm_mean_%s%s.png",outdir, sector_string, cap.data()));
   // c7->SaveAs(Form("%s/landau_fixed_width_mpv_%s.pdf",outdir, sector_string));
   //c7->SaveAs(Form("%s/landau_fixed_width_mpv_%s.png",outdir, sector_string));
 
-  c6->Print(Form("cosmics_%s.pdf)",sector_string),"fwhm over mpv");
+  c6->Print(Form("./final_plots/cosmics_%s%s.pdf)",sector_string, cap.data()),"fwhm over mpv");
   //c7->Print(Form("cosmics_%s.pdf",sector_string),"fixed width over mpv");
   return;
 }
 
 
 void sEPD_Cosmics_Draw(const string config_file = "cosmics_config.config"){
+  cout << "Start sEPD_Cosmics_Draw.C ... " << endl;
   TEnv *config_p = new TEnv(config_file.c_str());
   if (!config_p) {
     cout<<"No configuration file..."<<endl;
@@ -356,10 +360,12 @@ void sEPD_Cosmics_Draw(const string config_file = "cosmics_config.config"){
   bool debug = config_p->GetValue("DODEBUG", false);
   int bad_sipm = config_p->GetValue("BADSIPM", 1);
   const string outdir = config_p->GetValue("OUTDIR",".");
+  const string caption = config_p->GetValue("CAPTION","");
 
-  TFile *fin = new TFile(Form("%s/hists_and_fits_%d_%d.root", outdir.c_str(), top_sector, bottom_sector), "r");
-  sepdmip_draw(fin, top_sector, top_oe, minadc);
+  TFile *fin = new TFile(Form("%s/hists_and_fits_%d_%d%s.root", outdir.c_str(), top_sector, bottom_sector, (caption=="" ? caption.data() : ("_"+caption).data())), "r");
+  sepdmip_draw(fin, top_sector, top_oe, minadc, caption);
   fin->Close();
 
+  cout << "End sEPD_Cosmics_Draw.C ... " << endl;
   return;
 }

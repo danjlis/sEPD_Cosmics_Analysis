@@ -236,6 +236,7 @@ void sepdmip_run(
 
 
 void sEPD_Cosmics_Fitting(const string config_file = "cosmics_config.config"){
+  cout << "Start sEPD_Cosmics_Fitting.C ... " << endl;
   TEnv *config_p = new TEnv(config_file.c_str());
   if (!config_p) {
     cout<<"No configuration file..."<<endl;
@@ -252,16 +253,17 @@ void sEPD_Cosmics_Fitting(const string config_file = "cosmics_config.config"){
   bool debug = config_p->GetValue("DODEBUG", false);
   int bad_sipm = config_p->GetValue("BADSIPM", 1);
   const string outdir = config_p->GetValue("OUTDIR",".");
- 
+  const string caption = config_p->GetValue("CAPTION","");
   
-  TFile *fin = new TFile(Form("%s/outfile_%d_%d.root", outdir.c_str(), top_sector, bottom_sector), "read");
-  TFile *fout = new TFile(Form("%s/hists_and_fits_%d_%d.root", outdir.c_str(), top_sector, bottom_sector), "recreate");
+  //TFile *fin = new TFile(Form("%s/outfile_%d_%d.root", outdir.c_str(), top_sector, bottom_sector), "read");
+  TFile *fin = new TFile(Form("%s/outfile_%d_%d%s.root", outdir.c_str(), top_sector, bottom_sector, (caption=="" ? caption.data() : ("_"+caption).data()) ), "read");
+  TFile *fout = new TFile(Form("%s/hists_and_fits_%d_%d%s.root", outdir.c_str(), top_sector, bottom_sector, (caption=="" ? caption.data() : ("_"+caption).data())), "recreate");
 
   sepdmip_run(fin, fout, top_sector, minadc, debug);
 
-
-
+  config_p->Write("config", TObject::kOverwrite);
   fout->Close();
 
+  cout << "End sEPD_Cosmics_Fitting.C ... " << endl;
   return;
 }

@@ -1,25 +1,36 @@
 --------------- sEPD Cosmics Analysis -----------------
 
+Only once, make the following directories:
+  mkdir ./root
+  mkdir ./final_plots
+
 Here are the directions for running this analysis
 
-1. Make root file from prdf
-   - cd /sphenix/data/data02/sphenix/cemc/sectortest/root/
-   - ../
-0. Make directory in sepd_mip_plots/cosmics_s##
+0. Make root file from prdf (in highbay server)
 
-1. Edit cosmics_config.config (directions are in the file)
+  0.1 First copy the prdf file (from the va095 -> highbaygw server -> RCF) Note: run this in highbaygw 
+    $ scp phnxrc@va095:/home/phnxrc/emcalsectortestdata/cosmic/cosmic_000#####-0000.prdf . # va095 -> highbay
+    $ sftp [user name]@sftp.sdcc.bnl.gov:/sphenix/data/data02/sphenix/cemc/sepd/cosmic/ <<< $'put ./cosmic_000#####-0000.prdf' # highbaygw -> rcf
 
-2. Run:
+  0.2 run the following script to make a root file from the prdf file on RCF
+    $ cd /sphenix/data/data02/sphenix/cemc/sectortest/root/
+    $ ../wd409_sectortest/wd409 <prdf file> # e.g. ../wd409_sectortest/wd409 /sphenix/data/data02/sphenix/cemc/sepd/cosmic/cosmic_00023046-0000.prdf
+
+1. Make directory in sepd_mip_plots/cosmics_s##
+
+2. Edit cosmics_config.config (directions are in the file)
+
+3. Run:
    $ root sEPD_Cosmics_Analysis.C
    
    This puts histograms in ./root/outfile_[top sector]_[bottom_sector].root
 
-3. Run:    
+4. Run:    
    $ root sEPD_Cosmics_Fitting.C
 
    This	puts histograms and fits in ./root/hists_and_fits_[top sector]_[bottom_sector].root
 
-4. Run:     
+5. Run:     
    $ root sEPD_Cosmics_Draw.C
 
    This puts plots in ./sepd_mip_plots/cosmics_s##/

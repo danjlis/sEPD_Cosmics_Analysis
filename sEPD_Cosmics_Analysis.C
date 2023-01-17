@@ -237,6 +237,7 @@ void sepdmip_run(
 
 
 void sEPD_Cosmics_Analysis(const string config_file = "cosmics_config.config"){
+  cout << "Start sEPD_Cosmics_Analysis.C ... " << endl;
   TEnv *config_p = new TEnv(config_file.c_str());
   if (!config_p) {
     cout<<"No configuration file..."<<endl;
@@ -258,8 +259,9 @@ void sEPD_Cosmics_Analysis(const string config_file = "cosmics_config.config"){
   bool debug = config_p->GetValue("DODEBUG", false);
   int bad_sipm = config_p->GetValue("BADSIPM", 1);
   const string outdir = config_p->GetValue("OUTDIR",".");
+  const string caption = config_p->GetValue("CAPTION","");
  
-  TFile *fout = new TFile(Form("%s/outfile_%d_%d.root", outdir.c_str(), top_sector, bottom_sector), "recreate");
+  TFile *fout = new TFile(Form("%s/outfile_%d_%d%s.root", outdir.c_str(), top_sector, bottom_sector, (caption=="" ? caption.data() : ("_"+caption).data()) ), "recreate");
 
   if (odd_run){
     if (file_stack_odd.size() > 3) sepdmip_run(fout, file_stack_odd, top_sector, bottom_sector, 1, 1, minadc, maxadc, false, bad_sipm, debug);
@@ -271,7 +273,9 @@ void sEPD_Cosmics_Analysis(const string config_file = "cosmics_config.config"){
     if (file_shift_even.size() > 3) sepdmip_run(fout, file_shift_even, top_sector, bottom_sector, 0, 0, minadc, maxadc, true, bad_sipm, debug);
   }
 
+  config_p->Write("config", TObject::kOverwrite);
   fout->Close();
 
+  cout << "End sEPD_Cosmics_Analysis.C ... " << endl;
   return;
 }
