@@ -109,6 +109,7 @@ void makeHist(int testsec=24, int refsec=5)
   cref->Divide(4,4);
   cref_wl->Divide(4,4);
   ctest->Divide(4,4);
+  ctest_wl->Divide(4,4);
   ctest_refCut->Divide(4,4);
   ctest_CoincCut->Divide(4,4);
   ctest_CoincCut_IsoRefCut->Divide(4,4);
